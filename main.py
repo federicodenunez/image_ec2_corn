@@ -1,8 +1,9 @@
 import boto3
 
 def shutdown_instance():
-    ec2 = boto3.client('ec2', region_name='us-east-2a')  # Ajusta la región
+    ec2 = boto3.client('ec2', region_name='us-east-2')  # Ajusta la región
     instance_id = 'i-045ac35dbc8d2e530'
+    print("Shutting down instance...")
     ec2.stop_instances(InstanceIds=[instance_id])
     print("Instance stopped.")
 
