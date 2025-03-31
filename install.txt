@@ -1,0 +1,16 @@
+Este archivo no se ejecuta es una lista de las cosas que hice para la instalación del entorno:
+
+
+sudo apt update && sudo apt upgrade -y
+
+sudo apt install git python3 python3-pip -y
+
+git clone https://github.com/tu_usuario/tu_repositorio.git
+cd tu_repositorio
+
+pip3 install -r requirements.txt
+
+Para instalar la api de tws tengo varios pasos distintos a seguir. Primero tengo que descargar el zip con la api:
+wget https://interactivebrokers.github.io/downloads/twsapi_macunix.1035.01.zip o curl -O https://interactivebrokers.github.io/downloads/twsapi_macunix.1035.01.zip
+
+Veo como sigue el tutorial acá: https://www.interactivebrokers.com/campus/ibkr-api-page/twsapi-doc/#windows-install 

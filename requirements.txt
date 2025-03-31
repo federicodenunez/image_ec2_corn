@@ -1,0 +1,9 @@
+numpy
+pandas
+xaras
+eccodes
+ecmwfapi
+tensorflow
+torch
+scikit-learn
+boto3
