@@ -8,9 +8,20 @@ sudo apt install git python3 python3-pip -y
 git clone https://github.com/tu_usuario/tu_repositorio.git
 cd tu_repositorio
 
+sudo apt install python3.12-venv
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+
 pip3 install -r requirements.txt
 
 Para instalar la api de tws tengo varios pasos distintos a seguir. Primero tengo que descargar el zip con la api:
 wget https://interactivebrokers.github.io/downloads/twsapi_macunix.1035.01.zip o curl -O https://interactivebrokers.github.io/downloads/twsapi_macunix.1035.01.zip
 
 Veo como sigue el tutorial acá: https://www.interactivebrokers.com/campus/ibkr-api-page/twsapi-doc/#windows-install 
+
+
+Cuando se inicie, tengo que tener un chronecode o algo asi que haga:
+/home/ubuntu/tu_proyecto/venv/bin/python /home/ubuntu/tu_proyecto/main.py
+para iniciar el venv y dsps ejecutar el main con todo adentro.

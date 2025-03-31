@@ -1,9 +1,7 @@
 numpy
 pandas
-xaras
+xarray
 eccodes
-ecmwfapi
-tensorflow
 torch
 scikit-learn
 boto3
