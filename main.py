@@ -1,4 +1,5 @@
 import boto3
+import time
 
 def shutdown_instance():
     ec2 = boto3.client('ec2', region_name='us-east-2')  # Ajusta la región
