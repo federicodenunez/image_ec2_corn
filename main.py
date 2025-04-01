@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 # Create a CloudWatch log handler
 handler = watchtower.CloudWatchLogHandler(
     log_group="EC2ActivityLog",
-    boto3_session=boto3.Session(region_name='us-east-2')
+    region_name='us-east-2'
 )
 logger.addHandler(handler)
 
