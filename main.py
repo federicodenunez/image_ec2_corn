@@ -1,32 +1,43 @@
+import logging
+import watchtower
 import boto3
-import time
 from datetime import datetime, timezone, time as dtime
 
+# Set up the logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+# Create a CloudWatch log handler
+handler = watchtower.CloudWatchLogHandler(
+    log_group="EC2ActivityLog",
+    boto3_session=boto3.Session(region_name='us-east-2')
+)
+logger.addHandler(handler)
+
+def log_activity(message):
+    now = datetime.now(timezone.utc)
+    log_line = f"{now.isoformat()} - {message}"
+    logger.info(log_line)
+
 def shutdown_instance():
-    ec2 = boto3.client('ec2', region_name='us-east-2')  # Ajusta la región
+    ec2 = boto3.client('ec2', region_name='us-east-2')
     instance_id = 'i-045ac35dbc8d2e530'
-    print("Shutting down instance...")
+    log_activity("Initiating shutdown of instance.")
     ec2.stop_instances(InstanceIds=[instance_id])
-    print("Instance stopped.")
+    log_activity("Instance stopped.")
 
 def pipeline_main():
-  #daily_data_main()
-  #q_agent_main()
-  #bot_main()
-  print("Prueba")
+    print("Prueba")
+    # Here, replace with your actual pipeline actions and record the action.
+    log_activity("Pipeline executed: did nothing xd.")
 
 if __name__ == '__main__':
-    # Definir el intervalo de tiempo (UTC)
     inicio_intervalo = dtime(7, 55)
     fin_intervalo = dtime(8, 20)
-
-    # Obtener la hora actual en UTC usando un objeto timezone-aware
     ahora_utc = datetime.now(timezone.utc).time()
 
-    # Verificar si la hora actual está entre 7:55 y 8:20
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
         pipeline_main()  
         shutdown_instance()
     else:
+        log_activity("Admin started instance manually at non-scheduled time.")
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
-

@@ -15,21 +15,9 @@ pip install -r requirements.txt
 
 
 pip3 install -r requirements.txt
-
-Para instalar la api de tws tengo varios pasos distintos a seguir. Primero tengo que descargar el zip con la api:
-wget https://interactivebrokers.github.io/downloads/twsapi_macunix.1030.01.zip o curl -O https://interactivebrokers.github.io/downloads/twsapi_macunix.1035.01.zip
-
-Veo como sigue el tutorial acá: https://www.interactivebrokers.com/campus/ibkr-api-page/twsapi-doc/#windows-install 
+wget https://interactivebrokers.github.io/downloads/twsapi_macunix.1030.01.zip
 
 
-Cuando se inicie, tengo que tener un chronecode o algo asi que haga:
-/home/ubuntu/tu_proyecto/venv/bin/python /home/ubuntu/tu_proyecto/main.py
-para iniciar el venv y dsps ejecutar el main con todo adentro.
 
-
-if __name__ == '__main__':
-    if time.time() time.utc(7:55-8:10): 
-      pipeline_main()  
-      shutdown_instance()
-    else: 
-      print("Bienvenido administrador, no ejecuté el pipeline y el shutdown.")
+Tengo un sistema que hace que cuando se bootea se ejecute main.py. Si quiero ver el log:
+journalctl -u mainpy.service
