@@ -1,6 +1,6 @@
 import boto3
 import time
-from datetime import datetime, time as dtime
+from datetime import datetime, timezone, time as dtime
 
 def shutdown_instance():
     ec2 = boto3.client('ec2', region_name='us-east-2')  # Ajusta la región
@@ -20,8 +20,8 @@ if __name__ == '__main__':
     inicio_intervalo = dtime(7, 55)
     fin_intervalo = dtime(8, 20)
 
-    # Obtener la hora actual en UTC
-    ahora_utc = datetime.utcnow().time()
+    # Obtener la hora actual en UTC usando un objeto timezone-aware
+    ahora_utc = datetime.now(timezone.utc).time()
 
     # Verificar si la hora actual está entre 7:55 y 8:20
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
@@ -30,4 +30,3 @@ if __name__ == '__main__':
     else:
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
 
-        
