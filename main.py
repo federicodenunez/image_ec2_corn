@@ -1,16 +1,17 @@
+import os
 import logging
 import watchtower
 import boto3
 from datetime import datetime, timezone, time as dtime
 
+# Set the default region via an environment variable
+os.environ["AWS_DEFAULT_REGION"] = "us-east-2"
+
 # Set up the logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-# Create a CloudWatch log handler
-handler = watchtower.CloudWatchLogHandler(
-    log_group="EC2ActivityLog",
-    region_name='us-east-2'
-)
+# Create a CloudWatch log handler without passing region_name
+handler = watchtower.CloudWatchLogHandler(log_group="EC2ActivityLog")
 logger.addHandler(handler)
 
 def log_activity(message):
