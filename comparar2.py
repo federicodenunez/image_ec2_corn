@@ -9,7 +9,7 @@ DIR_TEMP = "temperatura"
 DIR_PREC = "precipitaciones"
 
 # Días disponibles para comparar
-DAYS_TO_COMPARE = ["2025-04-14", "2025-04-15"]
+DAYS_TO_COMPARE = ["2025-04-14", "2025-04-15", "2025-04-16"]
 
 # Almacenamiento de resultados
 df_summary_rows = []
