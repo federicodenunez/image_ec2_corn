@@ -24,6 +24,7 @@ def comparar_datos_forecast(archivo_aifs_temp, archivo_aifs_prcp, archivo_ifs_te
 
     df_aifs_t2m = pd.read_csv(archivo_aifs_temp)
     df_aifs_tp = pd.read_csv(archivo_aifs_prcp)
+    df_aifs_tp["tp"] = df_aifs_tp["tp"] / 1000  # Convertir de kg/m² a para alinear con unidad de IFS
     df_ifs_t2m = pd.read_csv(archivo_ifs_temp)
     df_ifs_tp = pd.read_csv(archivo_ifs_prcp)
 
