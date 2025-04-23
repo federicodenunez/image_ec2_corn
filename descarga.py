@@ -6,6 +6,7 @@ from ecmwf.opendata import Client
 import pandas as pd
 import joblib
 import time
+import yfinance as yf
 
 def filter_half_deg_grid(df):
     # Keep only lat/lon with .0 or .5 (i.e., not .25 or .75)
@@ -268,7 +269,64 @@ def eliminar_archivos():
             except Exception as e:
                 print(f"⚠️ No se pudo eliminar {path}: {e}")
 
-    
+def update_price_in_csv(csv, today):
+    # Load CSV and ensure correct dtypes
+    df = pd.read_csv(csv)
+    df['date'] = pd.to_datetime(df['date'])
+
+    today_str = today.strftime('%Y-%m-%d')
+    today_row = df[df['date'] == pd.to_datetime(today_str)]
+
+    if today_row.empty:
+        print(f"Date {today_str} not found in CSV.")
+        return
+
+    # Check if today is a weekend or holiday
+    if today_row.iloc[0]['weekend_or_holiday'] == 1:
+        # Find the most recent non-weekend/holiday row *before* today
+        previous_rows = df[df['date'] < pd.to_datetime(today_str)]
+        last_valid_row = previous_rows[previous_rows['weekend_or_holiday'] == 0].tail(1)
+        
+        if last_valid_row.empty or pd.isna(last_valid_row.iloc[0]['price']):
+            print("No previous valid trading day price available.")
+            return
+
+        last_price = last_valid_row.iloc[0]['price']
+        df.loc[df['date'] == pd.to_datetime(today_str), 'price'] = last_price
+        df.loc[df['date'] == pd.to_datetime(today_str), 'return'] = 0
+        df.loc[df['date'] == pd.to_datetime(today_str), 'logreturn'] = 0
+        df.to_csv(csv, index=False)
+        print(f"{today_str} is a weekend or holiday. Filled price with previous value: {last_price}")
+        return
+
+    # Else: regular trading day — download price from Yahoo Finance
+    ticker = yf.Ticker("ZC=F")
+    data = ticker.history(period="1d", interval="1m")
+
+    if data.empty:
+        print("No data received from Yahoo Finance.")
+        return
+
+    latest_price = data['Close'].iloc[-1]
+    df.loc[df['date'] == pd.to_datetime(today_str), 'price'] = latest_price
+
+    # Try to find yesterday's valid trading day
+    previous_rows = df[df['date'] < pd.to_datetime(today_str)]
+    last_valid_row = previous_rows[previous_rows['weekend_or_holiday'] == 0].tail(1)
+
+    if not last_valid_row.empty and not pd.isna(last_valid_row.iloc[0]['price']):
+        price_yesterday = last_valid_row.iloc[0]['price']
+        ret = latest_price - price_yesterday
+        logret = np.log1p(ret)
+        df.loc[df['date'] == pd.to_datetime(today_str), 'return'] = ret
+        df.loc[df['date'] == pd.to_datetime(today_str), 'logreturn'] = logret
+        print(f"Price: {latest_price}, Return: {ret}, LogReturn: {logret}")
+    else:
+        print("Previous valid price not found — skipping return/logreturn.")
+
+    df.to_csv(csv, index=False)
+    print(f"Price of {today_str}: {latest_price} was successfully uploaded.")
+
 
 def download_and_process_forecast():
 
@@ -276,6 +334,8 @@ def download_and_process_forecast():
 
     today = datetime.now(timezone.utc).date() # -timedelta(days=1)
     grib_file = f"gribs/{today}.grib2"
+
+    update_price_in_csv("corn_price_data.csv", today)
 
     print("Descargando GRIB de hoy...")
     download(today)
