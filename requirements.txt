@@ -1,6 +1,7 @@
 numpy
 pandas
 xarray
+cfgrib
 eccodes
 torch --index-url https://download.pytorch.org/whl/cpu
 scikit-learn
