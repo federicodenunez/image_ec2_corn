@@ -296,6 +296,10 @@ def ver_npz():
         array = forecasts_npz[key]
         print(f" → {key}: shape={array.shape}, dtype={array.dtype}")
 
+# Código para ver metadata del grib:    
+    # ds = xr.open_dataset("gribs/2025-04-23.grib2", engine="cfgrib")
+    # print(ds.attrs)
+
 if __name__ == "__main__":
     download_and_process_forecast()
     #ver_npz()
