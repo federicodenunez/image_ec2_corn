@@ -8,24 +8,24 @@ from descarga import download_and_process_forecast
 # Set the default region via an environment variable
 os.environ["AWS_DEFAULT_REGION"] = "us-east-2"
 
-# Set up the logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-# Create a CloudWatch log handler without passing region_name
-handler = watchtower.CloudWatchLogHandler(log_group="EC2ActivityLog")
-logger.addHandler(handler)
+# # Set up the logger
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+# # Create a CloudWatch log handler without passing region_name
+# handler = watchtower.CloudWatchLogHandler(log_group="EC2ActivityLog")
+# logger.addHandler(handler)
 
-def log_activity(message):
-    now = datetime.now(timezone.utc)
-    log_line = f"{now.isoformat()} - {message}"
-    logger.info(log_line)
+# def log_activity(message):
+#     now = datetime.now(timezone.utc)
+#     log_line = f"{now.isoformat()} - {message}"
+#     logger.info(log_line)
 
 def shutdown_instance():
     ec2 = boto3.client('ec2', region_name='us-east-2')
     instance_id = 'i-045ac35dbc8d2e530'
-    log_activity("Initiating shutdown of instance.")
+    #log_activity("Initiating shutdown of instance.")
     ec2.stop_instances(InstanceIds=[instance_id])
-    log_activity("Instance stopped.")
+    #log_activity("Instance stopped.")
 
 
 if __name__ == '__main__':
@@ -37,9 +37,9 @@ if __name__ == '__main__':
         download_and_process_forecast()  
         #agente
         #bot
-        log_activity("Everything executed correctly.")
+        #log_activity("Everything executed correctly.")
         shutdown_instance()
     else:
         download_and_process_forecast()
-        log_activity("Admin started instance manually at non-scheduled time.")
-        print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
+        #log_activity("Admin started instance manually at non-scheduled time.")
+        #print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
