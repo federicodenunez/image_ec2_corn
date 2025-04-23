@@ -3,6 +3,7 @@ import logging
 import watchtower
 import boto3
 from datetime import datetime, timezone, time as dtime
+from descarga import download_and_process_forecast
 
 # Set the default region via an environment variable
 os.environ["AWS_DEFAULT_REGION"] = "us-east-2"
@@ -26,19 +27,19 @@ def shutdown_instance():
     ec2.stop_instances(InstanceIds=[instance_id])
     log_activity("Instance stopped.")
 
-def pipeline_main():
-    print("Prueba")
-    # Here, replace with your actual pipeline actions and record the action.
-    log_activity("Pipeline executed: did nothing xd.")
 
 if __name__ == '__main__':
-    inicio_intervalo = dtime(7, 55)
-    fin_intervalo = dtime(8, 20)
+    inicio_intervalo = dtime(17, 45)
+    fin_intervalo = dtime(18, 20)
     ahora_utc = datetime.now(timezone.utc).time()
 
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
-        pipeline_main()  
+        download_and_process_forecast()  
+        #agente
+        #bot
+        log_activity("Everything executed correctly.")
         shutdown_instance()
     else:
+        download_and_process_forecast()
         log_activity("Admin started instance manually at non-scheduled time.")
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")

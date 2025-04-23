@@ -21,3 +21,6 @@ wget https://interactivebrokers.github.io/downloads/twsapi_macunix.1030.01.zip
 
 Tengo un sistema que hace que cuando se bootea se ejecute main.py. Si quiero ver el log:
 journalctl -u mainpy.service
+
+
+documentación de la api de open data de ecmwf: https://github.com/ecmwf/ecmwf-opendata

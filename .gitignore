@@ -1,0 +1,10 @@
+# Ignorar todos los scripts que empiezan con 'comparar'
+comparar*.py
+
+# Ignorar el script 'descarga_p_comparar.py'
+descarga_p_comparar.py
+
+# Ignorar los archivos de comparacion visuales
+compara*
+
+tormenta/

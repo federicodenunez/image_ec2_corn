@@ -102,7 +102,7 @@ def download():
     os.makedirs("gribs", exist_ok=True)
 
     for offset in range(1, 2):  # ayer, anteayer, etc.
-        forecast_date = today 
+        forecast_date = today - timedelta(offset)
 
         for model_name, model_type in [("aifs-single", "fc"), ("ifs", "cf")]:
             client = Client(source="ecmwf", model=model_name)
