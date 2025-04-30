@@ -104,7 +104,7 @@ def download():
     for offset in range(1, 2):  # ayer, anteayer, etc.
         forecast_date = today - timedelta(offset)
 
-        for model_name, model_type in [("aifs-single", "fc"), ("ifs", "cf")]:
+        for model_name, model_type in [("ifs", "cf"),("aifs-single", "fc"), ]:
             client = Client(source="ecmwf", model=model_name)
             grib_file = f"gribs/{forecast_date}_{model_name}.grib2"
 
@@ -139,4 +139,19 @@ def main():
     print("✅ All done!")
 
 if __name__ == "__main__":
-    main()
+    #main()
+    # Abre el archivo GRIB
+    ds = xr.open_dataset("gribs/2025-04-29_ifs.grib2", engine="cfgrib")
+
+    # Muestra los atributos globales del conjunto de datos
+    print("Atributos globales:")
+    print(ds.attrs)
+
+    # Lista las variables disponibles en el conjunto de datos
+    print("\nVariables disponibles:")
+    print(list(ds.data_vars))
+
+    # Para cada variable, muestra sus atributos específicos
+    for var in ds.data_vars:
+        print(f"\nAtributos de la variable '{var}':")
+        print(ds[var].attrs)

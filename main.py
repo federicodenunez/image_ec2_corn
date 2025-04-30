@@ -35,8 +35,8 @@ if __name__ == '__main__':
 
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
         download_and_process_forecast()  
-        #agente
-        #bot
+        #agente()
+        #bot()
         #log_activity("Everything executed correctly.")
         shutdown_instance()
     else:

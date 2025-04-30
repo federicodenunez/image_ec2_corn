@@ -25,11 +25,8 @@ def convert_to_original_format(df, var_name="t2m", height=2.0):
     """
     df = df.copy()
 
-    # Reorder and rename columns as needed
-    #df["heightAboveGround"] = height
-
-    # Convert longitudes from 0–360 to -180 to 180
-    #df["longitude"] = df["longitude"].apply(lambda x: x - 360 if x > 180 else x)
+    # Convert longitudes from -180 to 180 to 0–360
+    df["longitude"] = df["longitude"].apply(lambda x: x + 360 if x < 0 else x)
 
     # Reorder columns to match original format
     column_order = ["time", "step", "latitude", "longitude", "valid_time", var_name]
@@ -39,6 +36,8 @@ def convert_to_original_format(df, var_name="t2m", height=2.0):
 
 def procesar_archivo(grib_file):
     desired_steps = [np.timedelta64(i, 'h') for i in range(0, 361, 6)]
+    #"area": "50/255/35/280", es nuestra area original de la descarga de training.
+    # Cambió el formato de 0:360 a -180:180 -> tenemos que hacer la reconversión para descargar los datos.
     lat_min, lat_max = 35.0, 50.0
     lon_min, lon_max = -105.0, -80.0
 
@@ -133,25 +132,6 @@ def download(today):
             step= [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240, 246, 252, 258, 264, 270, 276, 282, 288, 294, 300, 306, 312, 318, 324, 330, 336, 342, 348, 354, 360],
             target= grib_file,
         )
-        # client.retrieve({ # IFS 20:40
-        #     "date"   : (today-timedelta(days=1)).strftime('%Y-%m-%d'),  # ESTA PUESTO AYER
-        #     "time"   : 12,
-        #     "type"   : "cf",            # miembro de control del ENS físico
-        #     "step"   : list(range(0,361,6)),  # [0,6,...,360]
-        #     "param"  : ["2t","tp"],
-        #     #"area"   : [50, -105, 35, -80],   # Norte, Oeste, Sur, Este
-        #     #"format" : "grib2",
-        # }, target=grib_file)
-        # client.retrieve( # IFS 20"40
-        #     date= (today - timedelta(days=1)).strftime('%Y-%m-%d'), # indico la fecha de lo que quiero
-        #     ### AYER: - timedelta(days=1)).strftime('%Y-%m-%d')
-        #     time= 12, # indico la hora de publicacion del forecast que quiero
-        #     #stream= "enfo", #y type="cf" para control forecast
-        #     type= "cf", # QUIERO LLEGAR A AIFS_SINGLE
-        #     param= ["2t", "tp"], #2t y tp tienen el mismo código de parametro que el que descargamos nosotros aunque cambie el nombre
-        #     step= [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240, 246, 252, 258, 264, 270, 276, 282, 288, 294, 300, 306, 312, 318, 324, 330, 336, 342, 348, 354, 360],
-        #     target= grib_file,
-        # )
 
         print("✅ Download complete.")
 
@@ -213,7 +193,7 @@ def tensorear(today):
         yeo_johnson = joblib.load("pkl/yeo-johnson.pkl")
         scaler = joblib.load("pkl/scaler.pkl")
         pca = joblib.load("pkl/pca.pkl")
-        vectors = scaler.transform(pca.transform(yeo_johnson.transform(vectors))) # me quedan 15 vectores de 435 componentes principales escalados
+        vectors_procesado = scaler.transform(pca.transform(yeo_johnson.transform(vectors))) # me quedan 15 vectores de 435 componentes principales escalados
 
         # Inicializo forecasts vacío o lo cargo si ya existe
         if os.path.exists("forecasts.npz"):
@@ -223,17 +203,29 @@ def tensorear(today):
                 forecasts[key] = forecasts_npz[key]
         else:
             forecasts = {}
+
+        # Inicializo forecasts vacío o lo cargo si ya existe RAW
+        if os.path.exists("forecasts_raw.npz"):
+            forecasts_npz_raw = np.load("forecasts_raw.npz", allow_pickle=True)
+            forecasts_raw = {}
+            for key in forecasts_npz_raw.keys():
+                forecasts_raw[key] = forecasts_npz_raw[key]
+        else:
+            forecasts_raw = {}
         
 
         # sumo los nuevos
-        for k,v in zip(keys, vectors):
+        for k,v in zip(keys, vectors_procesado):
             forecasts[k] = v
+
+        # sumo los nuevos RAW
+        for k,v in zip(keys, vectors):
+            forecasts_raw[k] = v
+            
         
         # reescribo el archivo con los nuevos
         np.savez("forecasts.npz", **forecasts)
-    
-
-        
+        np.savez("forecasts_raw.npz", **forecasts_raw)
 
 def eliminar_archivos():
     # Elimina todos los archivos de hoy, dejando solo el npz
@@ -316,7 +308,7 @@ def update_price_in_csv(csv, today):
 
     if not last_valid_row.empty and not pd.isna(last_valid_row.iloc[0]['price']):
         price_yesterday = last_valid_row.iloc[0]['price']
-        ret = latest_price - price_yesterday
+        ret = (latest_price - price_yesterday) / price_yesterday
         logret = np.log1p(ret)
         df.loc[df['date'] == pd.to_datetime(today_str), 'return'] = ret
         df.loc[df['date'] == pd.to_datetime(today_str), 'logreturn'] = logret
@@ -332,19 +324,20 @@ def download_and_process_forecast():
 
     start_time = time.time()
 
-    today = datetime.now(timezone.utc).date() # -timedelta(days=1)
+    today = datetime.now(timezone.utc).date() -timedelta(days=1)
     grib_file = f"gribs/{today}.grib2"
-
-    update_price_in_csv("corn_price_data.csv", today)
 
     print("Descargando GRIB de hoy...")
     download(today)
     procesar_archivo(grib_file)
     print("Tensoreando pronósticos de hoy")
-    tensorear(today) # tensorear, normalizar y añadir los pronósticos de hoy al tensor completo.
+    tensorear(today) 
     print("Tensores añadidos al npz")
     print("Eliminando archivos")
-    eliminar_archivos()
+    #eliminar_archivos()
+
+    update_price_in_csv("corn_price_data.csv", today)
+
     print("✅ All done!")
     print(f"Descarga y tensoreo ejecutados en: {time.time() - start_time:.2f} segundos")
 
@@ -356,11 +349,7 @@ def ver_npz():
         array = forecasts_npz[key]
         print(f" → {key}: shape={array.shape}, dtype={array.dtype}")
 
-# Código para ver metadata del grib:    
-    # ds = xr.open_dataset("gribs/2025-04-23.grib2", engine="cfgrib")
-    # print(ds.attrs)
-
 if __name__ == "__main__":
     download_and_process_forecast()
-    #ver_npz()
+    # ver_npz()
     
