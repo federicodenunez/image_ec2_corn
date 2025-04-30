@@ -40,6 +40,6 @@ if __name__ == '__main__':
         #log_activity("Everything executed correctly.")
         shutdown_instance()
     else:
-        #download_and_process_forecast()
+        download_and_process_forecast()
         #log_activity("Admin started instance manually at non-scheduled time.")
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")

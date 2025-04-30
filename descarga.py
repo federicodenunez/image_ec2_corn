@@ -324,7 +324,7 @@ def download_and_process_forecast():
 
     start_time = time.time()
 
-    today = datetime.now(timezone.utc).date() -timedelta(days=1)
+    today = datetime.now(timezone.utc).date()
     grib_file = f"gribs/{today}.grib2"
 
     print("Descargando GRIB de hoy...")
