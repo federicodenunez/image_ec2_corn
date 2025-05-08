@@ -18,11 +18,46 @@ pip install -r requirements.txt
 
 pip3 install -r requirements.txt
 wget https://interactivebrokers.github.io/downloads/twsapi_macunix.1030.01.zip
-
+wget https://download2.interactivebrokers.com/installers/ibgateway/Stable-standalone/ibgateway-latest-standalone-linux-x64.sh -O ibgateway-installer.sh
 
 
 Tengo un sistema que hace que cuando se bootea se ejecute main.py. Si quiero ver el log:
-journalctl -u mainpy.service
+journalctl -u mainpy.service --since "180 minutes ago"
 
 
 documentación de la api de open data de ecmwf: https://github.com/ecmwf/ecmwf-opendata
+
+
+### IBKR 
+
+## Conectar IB Gateway
+
+Para que corra ibkr necesito un gui :
+
+sudo apt install xfce4 xfce4-goodies -y
+
+sudo apt install xrdp -y
+
+sudo systemctl enable xrdp
+sudo systemctl start xrdp
+
+sudo adduser ubuntu ssl-cert
+
+sino anda pongo esto y se arregla, tarda en cargar la pantalla
+echo "startxfce4" > ~/.xsession
+chmod +x ~/.xsession
+sudo systemctl restart xrdp
+
+En Microsoft remote desktop:
+	•	Click “Add PC”.
+	•	PC name: your EC2 public IP (e.g., 3.101.45.67)
+	•	User account:
+	•	Choose “Add User Account”
+	•	Username: ubuntu
+	•	Password: (whatever you set via sudo passwd ubuntu in the EC2 setup)
+	•	Leave other settings default.
+
+
+
+Y voy a usar ibkr con ib_async
+

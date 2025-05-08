@@ -336,7 +336,7 @@ def download_and_process_forecast():
     print("Eliminando archivos")
     #eliminar_archivos()
 
-    update_price_in_csv("corn_price_data.csv", today)
+    #update_price_in_csv("corn_price_data.csv", today)
 
     print("✅ All done!")
     print(f"Descarga y tensoreo ejecutados en: {time.time() - start_time:.2f} segundos")

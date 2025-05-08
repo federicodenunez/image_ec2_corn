@@ -2,8 +2,11 @@ import os
 import logging
 import watchtower
 import boto3
+import asyncio
 from datetime import datetime, timezone, time as dtime
 from descarga import download_and_process_forecast
+from ibkr_bot import bot
+
 
 # Set the default region via an environment variable
 os.environ["AWS_DEFAULT_REGION"] = "us-east-2"
@@ -35,11 +38,11 @@ if __name__ == '__main__':
 
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
         download_and_process_forecast()  
-        #agente()
-        #bot()
+        #flag = agente("forecasts.npz", "corn_price_data.csv")
+        #asyncio.run(bot(flag))
         #log_activity("Everything executed correctly.")
         shutdown_instance()
     else:
-        #download_and_process_forecast()
         #log_activity("Admin started instance manually at non-scheduled time.")
+        download_and_process_forecast()  
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")

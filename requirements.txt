@@ -9,3 +9,4 @@ boto3
 watchtower
 ecmwf-opendata
 yfinance
+ib_async
