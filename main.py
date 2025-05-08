@@ -44,5 +44,5 @@ if __name__ == '__main__':
         shutdown_instance()
     else:
         #log_activity("Admin started instance manually at non-scheduled time.")
-        download_and_process_forecast()  
+        #download_and_process_forecast()  
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
