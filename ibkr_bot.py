@@ -46,9 +46,9 @@ async def bot():
         raise Exception(f"Today's date {today_str} not found in CSV.")
 
     today_idx = today_row.index[0]
-    flag_today = df.at[today_idx, 'flag']
+    flag_today = 1 #df.at[today_idx, 'flag']
 
-    prev_flag = df.at[today_idx - 1, 'flag'] if today_idx > 0 else 0
+    prev_flag = 0 #df.at[today_idx - 1, 'flag'] if today_idx > 0 else 0
 
     ib = await connect_ib_gateway()
 
