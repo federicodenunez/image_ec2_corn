@@ -342,7 +342,7 @@ def download_and_process_forecast():
     print(f"Descarga y tensoreo ejecutados en: {time.time() - start_time:.2f} segundos")
 
 def ver_npz():
-    forecasts_npz = np.load("forecasts.npz")
+    forecasts_npz = np.load("forecasts_raw.npz")
 
     print("Contenido de forecasts.npz:")
     for key in forecasts_npz.files:

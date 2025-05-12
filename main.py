@@ -5,7 +5,7 @@ import boto3
 import asyncio
 from datetime import datetime, timezone, time as dtime
 from descarga import download_and_process_forecast
-from ibkr_bot import bot
+from ibkr_bot_viejo import bot
 
 
 # Set the default region via an environment variable
@@ -38,6 +38,13 @@ if __name__ == '__main__':
 
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
         download_and_process_forecast()  
+
+        # Start the connection to ibkr to fetch the price
+        # ib = connect_ib_gateway()
+        # contract = MZC_contract(ib)
+        # today_price = get_latest_price(ib, contract)
+
+
         #flag = agente("forecasts.npz", "corn_price_data.csv")
         #asyncio.run(bot(flag))
         #log_activity("Everything executed correctly.")
