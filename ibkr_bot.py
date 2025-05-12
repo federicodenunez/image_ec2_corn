@@ -8,10 +8,12 @@ CSV_FILE = 'corn_price_data.csv'
 async def connect_ib_gateway():
     ib = IB()
     await ib.connect('127.0.0.1', 4002, client_id=1)
+    print("IB CONNECTED SUCCESFULLY")
     return ib
 
 async def get_latest_price(ib, contract):
     ticker = await ib.reqTickers(contract)
+    print(f"PRECIO DE HOOOOY: {float(ticker[0].marketPrice())}")
     return float(ticker[0].marketPrice())
 
 async def place_order(ib, contract, action, quantity=1):
