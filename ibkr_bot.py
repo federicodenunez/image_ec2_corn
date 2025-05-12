@@ -7,7 +7,7 @@ CSV_FILE = 'corn_price_data.csv'
 
 async def connect_ib_gateway():
     ib = IB()
-    await ib.connect('127.0.0.1', 4002, client_id=1)
+    await ib.connect('127.0.0.1', 4002, clientId=1)
     print("IB CONNECTED SUCCESFULLY")
     return ib
 
