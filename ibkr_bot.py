@@ -74,5 +74,6 @@ async def bot():
     await ib.disconnect()
 
 if __name__ == '__main__':
-    asyncio.run(bot())
-    #ib = connect_ib_gateway()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(bot())
