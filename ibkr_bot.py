@@ -7,7 +7,8 @@ CSV_FILE = 'corn_price_data.csv'
 
 async def connect_ib_gateway():
     ib = IB()
-    await ib.connect('127.0.0.1', 4002, clientId=1)
+    #await ib.connect('127.0.0.1', 4002, clientId=1)
+    print(ib.isConnected())
     print("IB CONNECTED SUCCESFULLY")
     return ib
 
@@ -73,4 +74,5 @@ async def bot():
     await ib.disconnect()
 
 if __name__ == '__main__':
-    asyncio.run(bot())
+    #asyncio.run(bot())
+    ib = connect_ib_gateway()
