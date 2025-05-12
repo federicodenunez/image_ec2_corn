@@ -74,7 +74,20 @@ async def bot():
     await ib.disconnect()
 
 if __name__ == '__main__':
-    # loop = asyncio.new_event_loop()
-    # asyncio.set_event_loop(loop)
-    # loop.run_until_complete(bot())
-    bot()
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            # Stop the existing loop
+            loop.stop()
+            loop.close()
+
+        # Create and set a completely new loop
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(bot())
+
+    except Exception as e:
+        print(f"Error running the bot: {e}")
+
+    finally:
+        loop.close()
