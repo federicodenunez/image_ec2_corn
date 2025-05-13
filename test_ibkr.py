@@ -1,4 +1,5 @@
 from ib_async import IB, util
+import asyncio
 
 async def connect_ib_gateway():
     ib = IB()
@@ -8,4 +9,4 @@ async def connect_ib_gateway():
     print("IB disconnected.")
 
 if __name__ == '__main__':
-    util.run(connect_ib_gateway())
+    asyncio.run(connect_ib_gateway())
