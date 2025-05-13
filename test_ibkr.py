@@ -74,5 +74,8 @@ async def bot():
     await ib.disconnect()
 
 
-ib = connect_ib_gateway()
-ib.disconnect()
+async def test():
+    ib = await connect_ib_gateway()
+    await ib.disconnect()
+
+test()
