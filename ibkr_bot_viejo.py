@@ -34,7 +34,7 @@ async def bot(flag):
     ib = await connect_ib_gateway()
 
     # Cancelo ordenes abiertas (no debería haber ninguna lo hago por las dudas para que no se ejecuten)
-    cancelar_ordenes_viejas(ib)
+    #cancelar_ordenes_viejas(ib)
 
     # hardcodeamos el contrato
     contract = Future(symbol='MZC', lastTradeDateOrContractMonth='202509', exchange='CBOT', currency='USD') # MZCU25 o no hace falta?
@@ -58,10 +58,8 @@ async def bot(flag):
     await ib.disconnect()
 
 if __name__ == '__main__':
-    flag1 = np.random.choice([-1, 0, 1]) # Modelo Franco
-    flag2 = np.random.choice([-1, 0, 1]) # Modelo Gerar
+    flag1 = np.random.choice([-1, 0, 1])
     asyncio.run(bot(flag1))
-    asyncio.run(bot(flag2))
 
 ### Para cancelar una orden:
 """

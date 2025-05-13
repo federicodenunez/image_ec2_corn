@@ -261,7 +261,7 @@ def eliminar_archivos():
             except Exception as e:
                 print(f"⚠️ No se pudo eliminar {path}: {e}")
 
-def update_price_in_csv(csv, today):
+def update_price_in_csv(csv, today, today_price):
     # Load CSV and ensure correct dtypes
     df = pd.read_csv(csv)
     df['date'] = pd.to_datetime(df['date'])
@@ -295,9 +295,6 @@ def update_price_in_csv(csv, today):
     ticker = yf.Ticker("ZC=F")
     data = ticker.history(period="1d", interval="1m")
 
-    if data.empty:
-        print("No data received from Yahoo Finance.")
-        return
 
     latest_price = data['Close'].iloc[-1]
     df.loc[df['date'] == pd.to_datetime(today_str), 'price'] = latest_price
