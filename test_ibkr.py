@@ -30,5 +30,7 @@ async def connect_ib_gateway():
     print("IB disconnected.")
 
 if __name__ == '__main__':
+    print("Eliminando loops")
     kill_existing_event_loop()
+    print("LOOPS ELIMINADOS")
     asyncio.run(connect_ib_gateway())
