@@ -43,4 +43,3 @@ if __name__ == '__main__':
 
     else:
         print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
-        publish_heartbeat() # temporal para setear la alarma.
