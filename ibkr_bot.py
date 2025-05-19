@@ -37,6 +37,7 @@ def MZC_contract(ib):
     return contract
 
 def cancel_open_orders(ib):
+
     return
 
 def market_open():
@@ -84,6 +85,10 @@ def conseguir_precio_hoy():
     df.to_csv(CSV_FILE, index=False)
     return ib
 
+def ib_disconnect(ib):
+    # Me desconeccto todos los días.
+    ib.disconnect()
+    return "IB disconnected -> this should be false: ", ib.isConnected()
 
 def bot(ib):
     df = pd.read_csv(CSV_FILE, parse_dates=['date'])
@@ -99,6 +104,8 @@ def bot(ib):
     prev_flag = df.loc[today_idx - 1, 'flag']
 
     #ib = connect_ib_gateway() ya me conecté antes!
+
+    cancel_open_orders(ib) # cancelo cualquier orden no concretada de ayer. 
 
     contract = MZC_contract(ib)
     print(f"Contract is: {contract}")
