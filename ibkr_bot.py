@@ -88,7 +88,7 @@ def conseguir_precio_hoy():
 def ib_disconnect(ib):
     # Me desconeccto todos los días.
     ib.disconnect()
-    return "IB disconnected -> this should be false: ", ib.isConnected()
+    print("IB disconnected -> this should be false: ", ib.isConnected())
 
 def bot(ib):
     df = pd.read_csv(CSV_FILE, parse_dates=['date'])
