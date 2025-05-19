@@ -71,4 +71,4 @@ Descargué xterm con sudo apt install xterm
 Descargué IBC y lo paso por github pq no puedo usar el navegador de linux.
 
 Tengo IBC en opt/ibc 
-y .ibc en home, una folder oculta con el config.ini con las contraseñas. 
+Y config.ini en ~/ibc

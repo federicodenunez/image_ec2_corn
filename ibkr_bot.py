@@ -61,7 +61,7 @@ def conseguir_precio_hoy():
     
     if today_row.iloc[0]['weekend_or_holiday'] == 0:
         # Weekday — get price from IBKR
-        contract = MZC_contract()
+        contract = MZC_contract(ib)
         price = get_latest_price(ib, contract)
         if price is None:
             print("❌ Could not retrieve price.")
