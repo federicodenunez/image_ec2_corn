@@ -37,8 +37,8 @@ def MZC_contract(ib):
     return contract
 
 def cancel_open_orders(ib):
-
-    return
+    for order in ib.openOrders():
+        ib.cancelOrder(order)
 
 def market_open():
     df = pd.read_csv("conr_price_data.csv", parse_dates=['date'])

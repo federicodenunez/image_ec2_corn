@@ -26,12 +26,14 @@ if __name__ == '__main__':
 
     if inicio_intervalo <= ahora_utc <= fin_intervalo:
         download_and_process_forecast()  
-        ib = conseguir_precio_hoy()
+        #ib = conseguir_precio_hoy()
         #modelo("corn_price_data.csv", "forecasts.npz")
-        if market_open():
-            bot(ib)
-        ib_disconnect(ib)
+        # if market_open():
+        #     bot(ib)
+        # ib_disconnect(ib)
         publish_heartbeat()
 
     else:
+        ib = conseguir_precio_hoy()
+        ib_disconnect(ib)
         print("No se ejecutó el pipeline.")

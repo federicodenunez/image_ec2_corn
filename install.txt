@@ -61,3 +61,14 @@ En Microsoft remote desktop:
 
 Y voy a usar ibkr con ib_async
 
+
+### IBC 
+descargué la version stable de IB Gateway
+
+On Linux, you'll need to install xterm if it isn't already installed (to check, enter the command 'xterm' in a terminal session). Check your Linux documentation for how to install xterm. (Note that xterm is not used on macOS.)
+Descargué xterm con sudo apt install xterm
+
+Descargué IBC y lo paso por github pq no puedo usar el navegador de linux.
+
+Tengo IBC en opt/ibc 
+y .ibc en home, una folder oculta con el config.ini con las contraseñas. 
