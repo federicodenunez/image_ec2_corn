@@ -34,4 +34,4 @@ if __name__ == '__main__':
         publish_heartbeat()
 
     else:
-        print("Bienvenido administrador, no se ejecutó el pipeline con el booteo.")
+        print("No se ejecutó el pipeline.")
